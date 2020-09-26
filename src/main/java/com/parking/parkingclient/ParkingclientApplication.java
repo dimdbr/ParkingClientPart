@@ -1,8 +1,7 @@
 package com.parking.parkingclient;
 
-import models.Client;
-import models.Contract;
-import models.ParkingPlace;
+import models.*;
+import org.hibernate.jdbc.Work;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -43,9 +42,17 @@ public class ParkingclientApplication {
     static final String GET_MALFUNCTION_BY_ID="http://localhost:8080/malf/{id}";
     static final String CREATE_MALFUNCTION="http://localhost:8080/malf";
 
+    static final String GET_WORKERS="http://localhost:8080/workers";
+    static final String GET_WORKERS_BY_ID="http://localhost:8080/workers/{id}";
+    static final String CREATE_WORKER="http://localhost:8080/workers";
+    static final String UPDATE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
+    static final String ADD_MALFUNCTION_FOR_WORKER="http://localhost:8080/workers/{id}/malf";
+    static final String DELETE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
+    Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
         // HttpHeaders
+
         ParkingclientApplication parkingclientApplication = new ParkingclientApplication();
         parkingclientApplication.getParkingPlaces();
         parkingclientApplication.GetParkingPlaceById("8");
@@ -66,15 +73,18 @@ public class ParkingclientApplication {
         parkingclientApplication.GetPayedMalfunction();
         parkingclientApplication.GetUnPayedMalfunction();
         parkingclientApplication.GetMalfunctionById();
+        parkingclientApplication.GetWorkers();
+        parkingclientApplication.GetWorkerById();
+        //parkingclientApplication.AddMalfunctionToWorker();
+        //parkingclientApplication.UpdateWorker();
+
     }
     private void getParkingPlaces()
     {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-
         ResponseEntity<String> result = restTemplate.exchange(GET_PARKING_PLACES,HttpMethod.GET,entity,String.class);
-
         System.out.println(result);
     }
     private void GetParkingPlaceById(String parkingPlaceId)
@@ -96,9 +106,7 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-
         ResponseEntity<String> result = restTemplate.exchange(GET_CLIENTS,HttpMethod.GET,entity,String.class);
-
         System.out.println(result);
     }
 
@@ -114,14 +122,11 @@ public class ParkingclientApplication {
 
     private void CreateClient()
     {
-        Scanner input = new Scanner(System.in);
+
 
         System.out.print("Enter an client name: ");
         String name = input.nextLine();
         System.out.println("Client created");
-
-        // closing the scanner object
-        input.close();
         Client client= new Client(name);
         ParkingPlace result = restTemplate.postForObject(CREATE_CLIENT,client,ParkingPlace.class);
         System.out.println(result);
@@ -129,14 +134,10 @@ public class ParkingclientApplication {
 
     private void DeleteClient()
     {
-        Scanner input = new Scanner(System.in);
 
         System.out.print("Enter an client id: ");
         String clientId = input.nextLine();
         System.out.println("Client deleted");
-
-        // closing the scanner object
-        input.close();
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",clientId);
         restTemplate.delete(DELETE_CLIENT,params);
@@ -147,20 +148,15 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-
         ResponseEntity<String> result = restTemplate.exchange(GET_CONTRACTS,HttpMethod.GET,entity,String.class);
-
         System.out.println(result);
     }
 
     private void GetContract()
     {
-        Scanner input = new Scanner(System.in);
 
         System.out.print("Enter an Contracts id: ");
         String ContractId = input.nextLine();
-        // closing the scanner object
-        input.close();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
@@ -171,30 +167,24 @@ public class ParkingclientApplication {
 
     private void CreateContracts()
     {
-        Scanner input = new Scanner(System.in);
 
         System.out.print("Enter an clientid name: ");
         String clientId = input.nextLine();
         System.out.print("Enter an carname name: ");
         String carname =input.nextLine();
         System.out.println("Contract created");
-
         // closing the scanner object
-        input.close();
         Contract contract= new Contract(clientId,carname);
         ParkingPlace result = restTemplate.postForObject(CREATE_CONTRACTS,contract,ParkingPlace.class);
         System.out.println(result);
     }
     private void DeleteContract()
     {
-        Scanner input = new Scanner(System.in);
+
 
         System.out.print("Enter an contract id: ");
         String contractId = input.nextLine();
         System.out.println("contract deleted");
-
-        // closing the scanner object
-        input.close();
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",contractId);
         restTemplate.delete(DELETE_CONTRACTS,params);
@@ -202,14 +192,13 @@ public class ParkingclientApplication {
     private void AddCarToContract()
     {
 
-        Scanner input = new Scanner(System.in);
+
         System.out.print("Enter an contractid name: ");
         String contractId = input.nextLine();
         System.out.print("Enter an carname to add: ");
         String carname =input.nextLine();
         System.out.println("Contract updated");
         // closing the scanner object
-        input.close();
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",contractId);
         params.put("carname",carname);
@@ -219,14 +208,12 @@ public class ParkingclientApplication {
 
     private void RemoveCarFromContract()
     {
-        Scanner input = new Scanner(System.in);
 
         System.out.print("Enter an contractid name: ");
         String contractId = input.nextLine();
         System.out.print("Enter an carname to remove: ");
         String carname =input.nextLine();
         System.out.println("Contract updated");
-        input.close();
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",contractId);
         params.put("carname",carname);
@@ -235,14 +222,13 @@ public class ParkingclientApplication {
 
     private void AddParkPlaceToContract()
     {
-        Scanner input = new Scanner(System.in);
+
 
         System.out.print("Enter an contractid name: ");
         String contractId = input.nextLine();
         System.out.print("Enter an parkplace to add: ");
         String parkingPlaceId =input.nextLine();
         System.out.println("Contract updated");
-        input.close();
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",contractId);
         params.put("parkingplaceid",parkingPlaceId);
@@ -251,13 +237,12 @@ public class ParkingclientApplication {
 
     private void RemoveParkingPlaceFromContract()
     {
-        Scanner input = new Scanner(System.in);
+
         System.out.print("Enter an contractid name: ");
         String contractId = input.nextLine();
         System.out.print("Enter an parkplace to remove: ");
         String parkingPlaceId =input.nextLine();
         System.out.println("Contract updated");
-        input.close();
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",contractId);
         params.put("parkingplaceid",parkingPlaceId);
@@ -269,19 +254,15 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-
         ResponseEntity<String> result = restTemplate.exchange(GET_TARIFFS,HttpMethod.GET,entity,String.class);
-
         System.out.println(result);
     }
 
     private void GetTariff()
     {
-        Scanner input = new Scanner(System.in);
+
         System.out.print("Enter an Tariff id: ");
         String tariffId = input.nextLine();
-        // closing the scanner object
-        input.close();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
@@ -295,9 +276,7 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-
         ResponseEntity<String> result = restTemplate.exchange(GET_PAYED_MALFUNCTIONS,HttpMethod.GET,entity,String.class);
-
         System.out.println(result);
     }
 
@@ -306,19 +285,15 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-
         ResponseEntity<String> result = restTemplate.exchange(GET_UNPAYED_MALFUNCTIONS,HttpMethod.GET,entity,String.class);
-
         System.out.println(result);
     }
 
     private void GetMalfunctionById()
     {
-        Scanner input = new Scanner(System.in);
-        System.out.print("Enter an Tariff id: ");
+
+        System.out.print("Enter an malfunction id: ");
         String malfunctionId = input.nextLine();
-        // closing the scanner object
-        input.close();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
@@ -327,6 +302,93 @@ public class ParkingclientApplication {
         System.out.println(result);
     }
 
+    private void GetWorkers()
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        ResponseEntity<String> result = restTemplate.exchange(GET_WORKERS,HttpMethod.GET,entity,String.class);
+        System.out.println(result);
+    }
+
+    private void GetWorkerById()
+    {
+
+        System.out.print("Enter an Workers id: ");
+        String workerId = input.nextLine();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("id",workerId);
+        ResponseEntity<String> result = restTemplate.exchange(GET_WORKERS_BY_ID,HttpMethod.GET,entity,String.class,params);
+        System.out.println(result);
+    }
+
+    private void CreateWorker()
+    {
+
+        System.out.print("Enter an worker name: ");
+        String workername = input.nextLine();
+        System.out.print("Enter an worker salary: ");
+        double salary =input.nextDouble();
+        System.out.print("Enter an worker type:(GAS,WATER,ELECTRICITY) ");
+        String type = input.next();
+        CW_Type cw_type =CW_Type.valueOf(type.toUpperCase());
+        // closing the scanner object
+        CommunalWorker communalWorker= new CommunalWorker(workername,salary,cw_type,false);
+        CommunalWorker result = restTemplate.postForObject(CREATE_WORKER,communalWorker,CommunalWorker.class);
+        System.out.println(result);
+    }
+
+    private void UpdateWorker()
+    {
+
+        System.out.print("Enter an workerid: ");
+        String workerId = input.nextLine();
+        System.out.print("Enter an worker name: ");
+        String workername = input.nextLine();
+        System.out.print("Enter an worker salary: ");
+        double salary =input.nextDouble();
+        System.out.print("Enter an worker type:(GAS,WATER,ELECTRICITY) ");
+        String type = input.next();
+        System.out.print("IS WINTER ?");
+        boolean isWinter=input.nextBoolean();
+        CW_Type cw_type =CW_Type.valueOf(type.toUpperCase());
+        Map < String, String > params = new HashMap < String, String > ();
+        params.put("id", workerId);
+        CommunalWorker updatedCW = new CommunalWorker(workername,salary,cw_type,isWinter);
+        restTemplate.put(UPDATE_WORKER_BY_ID, updatedCW, params);
+    }
+
+    private void AddMalfunctionToWorker()
+    {
+        System.out.print("Enter an workerid: ");
+        String workerId = input.nextLine();
+
+        System.out.print("Enter an fixprice: ");
+        double fixprice = input.nextDouble();
+
+        System.out.print("Enter an malfunctiondesc: ");
+        String desc =input.next();
+
+        Map < String, String > params = new HashMap < String, String > ();
+        params.put("id", workerId);
+
+        Malfunction malfunction=new Malfunction(fixprice,desc);
+        restTemplate.put(ADD_MALFUNCTION_FOR_WORKER,malfunction,params);
+    }
+
+    private void DeleteWorker()
+    {
+
+        System.out.print("Enter an workerid to delete:");
+        String workerId = input.nextLine();
+        input.close();
+        Map < String, String > params = new HashMap < String, String > ();
+        params.put("id", workerId);
+        restTemplate.delete(DELETE_WORKER_BY_ID, params);
+
+    }
 
 
 }
