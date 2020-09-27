@@ -48,35 +48,84 @@ public class ParkingclientApplication {
     static final String UPDATE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
     static final String ADD_MALFUNCTION_FOR_WORKER="http://localhost:8080/workers/{id}/malf";
     static final String DELETE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
+
+    static final String GET_OWNERS="http://localhost:8080/owners";
+    static final String GET_OWNER_BY_ID="http://localhost:8080/owners/{id}";
+    static final String CHANGE_TARIFF="http://localhost:8080/owners/changetariff/{id}";
+    static final String COLLECT_MONEY="http://localhost:8080/owners/{id}/collectmoney";
+    static final String PAY_MONEY="http://localhost:8080/owners/paymoney";
+
+    static final String GET_ACCOUNTANTS="http://localhost:8080/accountants";
+    static final String GET_ACCOUNTANT="http://localhost:8080/accountants/{id}";
+    static final String UPDATE_ACCOUNTANT_SALARY="http://localhost:8080/accountants/{id}";
+    static final String SET_CLIENTS_PAY_PRICE="http://localhost:8080/accountants/setprice";
+
     Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
         // HttpHeaders
-
         ParkingclientApplication parkingclientApplication = new ParkingclientApplication();
+        System.out.println("Parking places");
         parkingclientApplication.getParkingPlaces();
+        System.out.println("Parking places with id 8");
         parkingclientApplication.GetParkingPlaceById("8");
+        System.out.println("all clients");
         parkingclientApplication.GetClients();
         //parkingclientApplication.CreateClient();
         //parkingclientApplication.DeleteClient();
         //SpringApplication.run(ParkingclientApplication.class, args);
-        System.out.println("contracts:");
+        System.out.println("all contracts:");
         parkingclientApplication.GetContracts();
-        //parkingclientApplication.AddCarToContract();
+        System.out.println("Adding car to contract");
+        parkingclientApplication.AddCarToContract();
         //parkingclientApplication.CreateContracts();
-        //parkingclientApplication.AddParkPlaceToContract();
+        System.out.println("add parkingplace to contract");
+        parkingclientApplication.AddParkPlaceToContract();
         //parkingclientApplication.RemoveParkingPlaceFromContract();
-        //parkingclientApplication.GetContracts();
-        //parkingclientApplication.getParkingPlaces();
+        System.out.println("all contracts:");
+        parkingclientApplication.GetContracts();
+        System.out.println("parkingplaces");
+        parkingclientApplication.getParkingPlaces();
+        System.out.println("all tariffs");
         parkingclientApplication.GetTariffs();
         //parkingclientApplication.GetTariff();
+
+        System.out.println("payed malfunctions");
         parkingclientApplication.GetPayedMalfunction();
+        System.out.println("unpayed malfunctions");
         parkingclientApplication.GetUnPayedMalfunction();
+        System.out.println("get malfunction by id");
         parkingclientApplication.GetMalfunctionById();
+        System.out.println("all workers");
         parkingclientApplication.GetWorkers();
+        System.out.println("get worker by id");
         parkingclientApplication.GetWorkerById();
-        //parkingclientApplication.AddMalfunctionToWorker();
+        System.out.println("add malfunction to worker");
+        parkingclientApplication.AddMalfunctionToWorker();
         //parkingclientApplication.UpdateWorker();
+        System.out.println("all coowners");
+        parkingclientApplication.GetOwners();
+        System.out.println("get owner by id");
+        parkingclientApplication.GetOwnerById();
+        System.out.println("collect monet for owner id");
+        parkingclientApplication.CollectMoney();
+        System.out.println("paying money for workers");
+        parkingclientApplication.PayMoney();
+        System.out.println("get owner by id to check");
+        parkingclientApplication.GetOwnerById();
+        System.out.println("all accountants");
+        parkingclientApplication.GetAccountants();
+        System.out.println("get accountant by id");
+        parkingclientApplication.GetAccountant();
+        System.out.println("update salary for accountant");
+        parkingclientApplication.UpdateSalary();
+        System.out.println("get accountant by id");
+        parkingclientApplication.GetAccountant();
+        System.out.println("calculating clients pay price");
+        parkingclientApplication.SetClientPayPrice();
+        System.out.println("get all clients");
+        parkingclientApplication.GetClients();
+
 
     }
     private void getParkingPlaces()
@@ -390,5 +439,98 @@ public class ParkingclientApplication {
 
     }
 
+    private void GetOwners()
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        ResponseEntity<String> result = restTemplate.exchange(GET_OWNERS,HttpMethod.GET,entity,String.class);
+        System.out.println(result);
+    }
+
+    private void GetOwnerById()
+    {
+        System.out.print("Enter an Owner id: ");
+        int ownerID = input.nextInt();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        Map<String,Integer> params = new HashMap<String, Integer>();
+        params.put("id",ownerID);
+        ResponseEntity<String> result = restTemplate.exchange(GET_OWNER_BY_ID,HttpMethod.GET,entity,String.class,params);
+        System.out.println(result);
+
+    }
+
+    private void UpdateTariff()
+    {
+        System.out.print("Enter tariff id: ");
+        int tariffId = input.nextInt();
+        System.out.print("Enter an parkingprice: ");
+        double parkingprice = input.nextDouble();
+        System.out.print("Enter an watertariff: ");
+        double watertariff = input.nextDouble();
+        System.out.print("Enter an electricitytariff: ");
+        double electricitytariff = input.nextDouble();
+        System.out.print("Enter an gastariff: ");
+        double gastariff = input.nextDouble();
+        System.out.print("Enter an tariffdesc: ");
+        String desc =input.next();
+        Map < String, Integer > params = new HashMap < String, Integer>();
+        params.put("id", tariffId);
+        Tariff tariff=new Tariff(parkingprice,watertariff,electricitytariff,gastariff,desc);
+        restTemplate.put(CHANGE_TARIFF,tariff,params);
+    }
+
+    private void CollectMoney()
+    {
+        System.out.print("Enter owner id: ");
+        int ownerId = input.nextInt();
+        Map < String, Integer > params = new HashMap < String, Integer>() ;
+        params.put("id", ownerId);
+        restTemplate.put(COLLECT_MONEY,CoOwner.class,params);
+    }
+
+    private void PayMoney()
+    {
+        restTemplate.put(PAY_MONEY,CoOwner.class);
+    }
+
+
+    private void GetAccountants()
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        ResponseEntity<String> result = restTemplate.exchange(GET_ACCOUNTANTS,HttpMethod.GET,entity,String.class);
+        System.out.println(result);
+    }
+    private void GetAccountant()
+    {
+        System.out.print("Enter an accountant id: ");
+        int accountantId = input.nextInt();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        Map<String,Integer> params = new HashMap<String, Integer>();
+        params.put("id",accountantId);
+        ResponseEntity<String> result = restTemplate.exchange(GET_ACCOUNTANT,HttpMethod.GET,entity,String.class,params);
+        System.out.println(result);
+    }
+
+    private void UpdateSalary()
+    {
+        System.out.print("Enter an accountant id: ");
+        int accountantId = input.nextInt();
+        System.out.println("Enter new Salary");
+        double newSalary = input.nextDouble();
+        Map<String,Integer> params = new HashMap<String, Integer>();
+        params.put("id",accountantId);
+        restTemplate.put(UPDATE_ACCOUNTANT_SALARY,newSalary,params);
+
+    }
+
+    private void SetClientPayPrice()
+    {
+        restTemplate.put(SET_CLIENTS_PAY_PRICE,Accountant.class);
+    }
 
 }
