@@ -5,42 +5,42 @@ import java.util.List;
 import java.util.UUID;
 
 public class Contract {
-    private String ContractId;
-    private String ClientId;
+    private UUID ContractId;
+    private UUID ClientId;
     private List<String> registeredCars;
 
-    public Contract(String contractId, String clientId, List<String> registeredCars) {
+    public Contract(UUID contractId, UUID clientId, List<String> registeredCars) {
         ContractId = contractId;
         ClientId = clientId;
         this.registeredCars = registeredCars;
     }
-    public Contract(String clientId, String carName)
-    {   this.ContractId= UUID.randomUUID().toString();
+    public Contract(UUID clientId, String carName)
+    {   this.ContractId= UUID.randomUUID();
         this.ClientId= clientId;
         List<String> carnames=new ArrayList<>();
         carnames.add(carName);
         this.registeredCars=carnames;
     }
-    public Contract(String clientId, List<String> carNames)
+    public Contract(UUID clientId, List<String> carNames)
     {
-        this.ContractId=UUID.randomUUID().toString();
+        this.ContractId=UUID.randomUUID();
         this.ClientId= clientId;
 
         this.registeredCars=carNames;
     }
-    public String getContractId() {
+    public UUID getContractId() {
         return ContractId;
     }
 
-    public void setContractId(String contractId) {
+    public void setContractId(UUID contractId) {
         ContractId = contractId;
     }
 
-    public String getClientId() {
+    public UUID getClientId() {
         return ClientId;
     }
 
-    public void setClientId(String clientId) {
+    public void setClientId(UUID clientId) {
         ClientId = clientId;
     }
 

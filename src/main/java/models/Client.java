@@ -3,29 +3,29 @@ package models;
 import java.util.UUID;
 
 public class Client {
-    private  String clientID;
+    private  UUID clientID;
     private  String name;
     private  double monthPay;
 
-    public Client(String clientID, String name, double monthPay) {
+    public Client(UUID clientID, String name, double monthPay) {
         this.clientID = clientID;
         this.name = name;
         this.monthPay = monthPay;
     }
 
     public Client(String name) {
-        this.clientID= UUID.randomUUID().toString();
+        this.clientID= UUID.randomUUID();
         this.name = name;
         this.monthPay=0;
     }
     public Client() {
 
     }
-    public String getClientID() {
+    public UUID getClientID() {
         return clientID;
     }
 
-    public void setClientID(String clientID) {
+    public void setClientID(UUID clientID) {
         this.clientID = clientID;
     }
 

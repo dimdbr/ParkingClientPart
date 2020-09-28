@@ -3,13 +3,13 @@ package models;
 import java.util.UUID;
 
 public class CommunalWorker {
-    private String cwId;
+    private UUID cwId;
     private String name;
     private double salary;
     private CW_Type cwType;
     private boolean isWinter;
 
-    public CommunalWorker(String cwId, String name, double salary, CW_Type cwType, boolean isWinter, String malfunctionId) {
+    public CommunalWorker(UUID cwId, String name, double salary, CW_Type cwType, boolean isWinter, String malfunctionId) {
         this.cwId = cwId;
         this.name = name;
         this.salary = salary;
@@ -19,7 +19,7 @@ public class CommunalWorker {
     }
 
     public CommunalWorker(String name, double salary, CW_Type cwType, boolean isWinter) {
-        this.cwId = UUID.randomUUID().toString();
+        this.cwId = UUID.randomUUID();
         this.name = name;
         this.salary = salary;
         this.cwType = cwType;
@@ -31,11 +31,11 @@ public class CommunalWorker {
 
     }
 
-    public String getCwId() {
+    public UUID getCwId() {
         return cwId;
     }
 
-    public void setCwId(String cwId) {
+    public void setCwId(UUID cwId) {
         this.cwId = cwId;
     }
 
@@ -69,5 +69,16 @@ public class CommunalWorker {
 
     public void setWinter(boolean winter) {
         isWinter = winter;
+    }
+
+    @Override
+    public String toString() {
+        return "CommunalWorker{" +
+                "cwId=" + cwId +
+                ", name='" + name + '\'' +
+                ", salary=" + salary +
+                ", cwType=" + cwType +
+                ", isWinter=" + isWinter +
+                '}';
     }
 }

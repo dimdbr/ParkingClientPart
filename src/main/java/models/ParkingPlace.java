@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.mapping.Value;
 
 import javax.persistence.Id;
+import java.io.Serializable;
+import java.util.UUID;
 
-public class ParkingPlace {
+public class ParkingPlace implements Serializable {
 
     private int Id;
     private boolean isOccupied;
-    private String contractId;
+    private UUID contractId;
 
     public ParkingPlace( int Id,
                          boolean isOccupied) {
@@ -38,11 +40,11 @@ public class ParkingPlace {
         isOccupied = occupied;
     }
 
-    public String getContractId() {
+    public UUID getContractId() {
         return contractId;
     }
 
-    public void setContractId(String contractId) {
+    public void setContractId(UUID contractId) {
         this.contractId = contractId;
     }
 

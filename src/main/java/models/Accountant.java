@@ -42,4 +42,13 @@ public class Accountant {
     public void setSalary(double salary) {
         this.salary = salary;
     }
+
+    @Override
+    public String toString() {
+        return "Accountant{" +
+                "accountantId=" + accountantId +
+                ", name='" + name + '\'' +
+                ", salary=" + salary +
+                '}';
+    }
 }

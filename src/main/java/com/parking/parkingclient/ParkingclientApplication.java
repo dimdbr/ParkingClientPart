@@ -3,13 +3,11 @@ package com.parking.parkingclient;
 import models.*;
 import org.hibernate.jdbc.Work;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 @SpringBootApplication
 public class ParkingclientApplication {
@@ -37,16 +35,16 @@ public class ParkingclientApplication {
     static final String GET_TARIFFS="http://localhost:8080/tariffs";
     static final String GET_TARIFF="http://localhost:8080/tariffs/{id}";
 
-    static final String GET_PAYED_MALFUNCTIONS="http://localhost:8080/malf/p";
-    static final String GET_UNPAYED_MALFUNCTIONS="http://localhost:8080/malf/up";
-    static final String GET_MALFUNCTION_BY_ID="http://localhost:8080/malf/{id}";
-    static final String CREATE_MALFUNCTION="http://localhost:8080/malf";
+    static final String GET_MALFUNCTIONS="http://localhost:8080/malfunctions";
+    //static final String GET_UNPAYED_MALFUNCTIONS="http://localhost:8080/malfunctions/unpayed";
+    static final String GET_MALFUNCTION_BY_ID="http://localhost:8080/malfunctions/{id}";
+    static final String CREATE_MALFUNCTION="http://localhost:8080/malfunctions";
 
     static final String GET_WORKERS="http://localhost:8080/workers";
     static final String GET_WORKERS_BY_ID="http://localhost:8080/workers/{id}";
     static final String CREATE_WORKER="http://localhost:8080/workers";
     static final String UPDATE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
-    static final String ADD_MALFUNCTION_FOR_WORKER="http://localhost:8080/workers/{id}/malf";
+    static final String ADD_MALFUNCTION_FOR_WORKER="http://localhost:8080/workers/{id}/malfunctions";
     static final String DELETE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
 
     static final String GET_OWNERS="http://localhost:8080/owners";
@@ -67,62 +65,67 @@ public class ParkingclientApplication {
         ParkingclientApplication parkingclientApplication = new ParkingclientApplication();
         System.out.println("Parking places");
         parkingclientApplication.getParkingPlaces();
-        System.out.println("Parking places with id 8");
-        parkingclientApplication.GetParkingPlaceById("8");
+        //System.out.println("Parking places with id 8");
+        //parkingclientApplication.GetParkingPlaceById("8");
+        //System.out.println("creating client");
+        //parkingclientApplication.CreateClient();
         System.out.println("all clients");
         parkingclientApplication.GetClients();
-        //parkingclientApplication.CreateClient();
         //parkingclientApplication.DeleteClient();
         //SpringApplication.run(ParkingclientApplication.class, args);
         System.out.println("all contracts:");
         parkingclientApplication.GetContracts();
-        System.out.println("Adding car to contract");
-        parkingclientApplication.AddCarToContract();
+        //System.out.println("Adding car to contract");
+        //System.out.println("Creating contract");
         //parkingclientApplication.CreateContracts();
-        System.out.println("add parkingplace to contract");
-        parkingclientApplication.AddParkPlaceToContract();
+        //System.out.println("add car to contract");
+        //parkingclientApplication.AddCarToContract();
+        //System.out.println("add parkingplace to contract");
+        //parkingclientApplication.AddParkPlaceToContract();
         //parkingclientApplication.RemoveParkingPlaceFromContract();
         System.out.println("all contracts:");
         parkingclientApplication.GetContracts();
-        System.out.println("parkingplaces");
-        parkingclientApplication.getParkingPlaces();
+        //System.out.println("parkingplaces");
+        //parkingclientApplication.getParkingPlaces();
         System.out.println("all tariffs");
         parkingclientApplication.GetTariffs();
         //parkingclientApplication.GetTariff();
 
-        System.out.println("payed malfunctions");
-        parkingclientApplication.GetPayedMalfunction();
-        System.out.println("unpayed malfunctions");
-        parkingclientApplication.GetUnPayedMalfunction();
-        System.out.println("get malfunction by id");
-        parkingclientApplication.GetMalfunctionById();
+
         System.out.println("all workers");
         parkingclientApplication.GetWorkers();
         System.out.println("get worker by id");
         parkingclientApplication.GetWorkerById();
-        System.out.println("add malfunction to worker");
-        parkingclientApplication.AddMalfunctionToWorker();
+
+        //System.out.println("add malfunction to worker");
+        //parkingclientApplication.AddMalfunctionToWorker();
+
+        System.out.println("select malfunctions (true, false)");
+        parkingclientApplication.GetMalfunctions();
+        System.out.println("get malfunction by id");
+        parkingclientApplication.GetMalfunctionById();
+
         //parkingclientApplication.UpdateWorker();
         System.out.println("all coowners");
         parkingclientApplication.GetOwners();
         System.out.println("get owner by id");
         parkingclientApplication.GetOwnerById();
-        System.out.println("collect monet for owner id");
-        parkingclientApplication.CollectMoney();
-        System.out.println("paying money for workers");
-        parkingclientApplication.PayMoney();
-        System.out.println("get owner by id to check");
-        parkingclientApplication.GetOwnerById();
+        //System.out.println("collect monet for owner id");
+        //parkingclientApplication.CollectMoney();
+        //System.out.println("paying money for workers");
+        //parkingclientApplication.PayMoney();
+        //System.out.println("get owner by id to check");
+        //parkingclientApplication.GetOwnerById();
         System.out.println("all accountants");
         parkingclientApplication.GetAccountants();
         System.out.println("get accountant by id");
         parkingclientApplication.GetAccountant();
-        System.out.println("update salary for accountant");
-        parkingclientApplication.UpdateSalary();
+        //System.out.println("update salary for accountant");
+        //parkingclientApplication.UpdateSalary();
         System.out.println("get accountant by id");
         parkingclientApplication.GetAccountant();
-        System.out.println("calculating clients pay price");
-        parkingclientApplication.SetClientPayPrice();
+        //System.out.println("calculating clients pay price");
+        //parkingclientApplication.SetClientPayPrice();
         System.out.println("get all clients");
         parkingclientApplication.GetClients();
 
@@ -133,6 +136,8 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        //ResponseEntity<List<ParkingPlace>> parkingplacesresp=restTemplate.exchange(GET_PARKING_PLACES, HttpMethod.GET, null, new ParameterizedTypeReference<List<ParkingPlace>>(){});
+        //List<ParkingPlace> parkingPlaces = parkingplacesresp.getBody();
         ResponseEntity<String> result = restTemplate.exchange(GET_PARKING_PLACES,HttpMethod.GET,entity,String.class);
         System.out.println(result);
     }
@@ -155,6 +160,13 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        ResponseEntity<List<Client>> parkingplacesresp=restTemplate.exchange(GET_CLIENTS, HttpMethod.GET, null, new ParameterizedTypeReference<List<Client>>(){});
+        List<Client> clients = parkingplacesresp.getBody();
+
+        for (Client client:clients)
+        {
+            System.out.println(client);
+        }
         ResponseEntity<String> result = restTemplate.exchange(GET_CLIENTS,HttpMethod.GET,entity,String.class);
         System.out.println(result);
     }
@@ -171,8 +183,6 @@ public class ParkingclientApplication {
 
     private void CreateClient()
     {
-
-
         System.out.print("Enter an client name: ");
         String name = input.nextLine();
         System.out.println("Client created");
@@ -199,6 +209,7 @@ public class ParkingclientApplication {
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         ResponseEntity<String> result = restTemplate.exchange(GET_CONTRACTS,HttpMethod.GET,entity,String.class);
         System.out.println(result);
+
     }
 
     private void GetContract()
@@ -210,6 +221,9 @@ public class ParkingclientApplication {
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",ContractId);
+
+        ResponseEntity<Contract> contractResponseEntity = restTemplate.exchange(GET_CONTRACT,HttpMethod.GET,null,Contract.class);
+        System.out.println(contractResponseEntity.getBody());
         ResponseEntity<String> result = restTemplate.exchange(GET_CONTRACT,HttpMethod.GET,entity,String.class,params);
         System.out.println(result);
     }
@@ -218,7 +232,8 @@ public class ParkingclientApplication {
     {
 
         System.out.print("Enter an clientid name: ");
-        String clientId = input.nextLine();
+        String  fakeclientId = input.nextLine();
+        UUID clientId = UUID.fromString(fakeclientId);
         System.out.print("Enter an carname name: ");
         String carname =input.nextLine();
         System.out.println("Contract created");
@@ -242,7 +257,7 @@ public class ParkingclientApplication {
     {
 
 
-        System.out.print("Enter an contractid name: ");
+        System.out.print("Enter an contractid: ");
         String contractId = input.nextLine();
         System.out.print("Enter an carname to add: ");
         String carname =input.nextLine();
@@ -320,23 +335,19 @@ public class ParkingclientApplication {
         System.out.println(result);
     }
 
-    private void GetPayedMalfunction()
+    private void GetMalfunctions()
     {
         HttpHeaders headers = new HttpHeaders();
+        String ispayed=input.nextLine();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-        ResponseEntity<String> result = restTemplate.exchange(GET_PAYED_MALFUNCTIONS,HttpMethod.GET,entity,String.class);
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("ispayed",ispayed);
+        ResponseEntity<String> result = restTemplate.exchange(GET_MALFUNCTIONS,HttpMethod.GET,entity,String.class,ispayed);
         System.out.println(result);
+
     }
 
-    private void GetUnPayedMalfunction()
-    {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
-        ResponseEntity<String> result = restTemplate.exchange(GET_UNPAYED_MALFUNCTIONS,HttpMethod.GET,entity,String.class);
-        System.out.println(result);
-    }
 
     private void GetMalfunctionById()
     {
@@ -356,6 +367,13 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        ResponseEntity<List<CommunalWorker>> communalworkersresp=restTemplate.exchange(GET_WORKERS, HttpMethod.GET, null, new ParameterizedTypeReference<List<CommunalWorker>>(){});
+        List<CommunalWorker> communalWorkers = communalworkersresp.getBody();
+
+        for (CommunalWorker communalWorker:communalWorkers)
+        {
+            System.out.println(communalWorker);
+        }
         ResponseEntity<String> result = restTemplate.exchange(GET_WORKERS,HttpMethod.GET,entity,String.class);
         System.out.println(result);
     }
@@ -369,6 +387,9 @@ public class ParkingclientApplication {
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",workerId);
+        ResponseEntity<CommunalWorker> parkingplacesresp=restTemplate.exchange(GET_WORKERS_BY_ID, HttpMethod.GET,null , new ParameterizedTypeReference<CommunalWorker>(){},params);
+        CommunalWorker communalWorker = parkingplacesresp.getBody();
+        System.out.println(communalWorker);
         ResponseEntity<String> result = restTemplate.exchange(GET_WORKERS_BY_ID,HttpMethod.GET,entity,String.class,params);
         System.out.println(result);
     }
@@ -444,6 +465,13 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        ResponseEntity<List<CoOwner>> CoOwnersresp=restTemplate.exchange(GET_OWNERS, HttpMethod.GET, null, new ParameterizedTypeReference<List<CoOwner>>(){});
+        List<CoOwner> coOwners = CoOwnersresp.getBody();
+
+        for (CoOwner coOwner:coOwners)
+        {
+            System.out.println(coOwner);
+        }
         ResponseEntity<String> result = restTemplate.exchange(GET_OWNERS,HttpMethod.GET,entity,String.class);
         System.out.println(result);
     }
@@ -456,6 +484,9 @@ public class ParkingclientApplication {
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,Integer> params = new HashMap<String, Integer>();
         params.put("id",ownerID);
+        ResponseEntity<CoOwner> CoOwnerresp=restTemplate.exchange(GET_OWNER_BY_ID, HttpMethod.GET, null, new ParameterizedTypeReference<CoOwner>(){},params);
+        CoOwner coOwner = CoOwnerresp.getBody();
+        System.out.println(coOwner);
         ResponseEntity<String> result = restTemplate.exchange(GET_OWNER_BY_ID,HttpMethod.GET,entity,String.class,params);
         System.out.println(result);
 
@@ -501,6 +532,13 @@ public class ParkingclientApplication {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
+        ResponseEntity<List<Accountant>> accountantesp=restTemplate.exchange(GET_ACCOUNTANTS, HttpMethod.GET, null, new ParameterizedTypeReference<List<Accountant>>(){});
+        List<Accountant> accountants = accountantesp.getBody();
+
+        for (Accountant accountant:accountants)
+        {
+            System.out.println(accountant);
+        }
         ResponseEntity<String> result = restTemplate.exchange(GET_ACCOUNTANTS,HttpMethod.GET,entity,String.class);
         System.out.println(result);
     }
