@@ -32,6 +32,7 @@ public class ParkingclientApplication {
     static final String ADD_PARK_PLACE_TO_CONTRACT="http://localhost:8080/contracts/{id}/addparkplace/{parkingplaceid}";
     static final String REMOVE_PARK_PLACE_FROM_CONTRACT="http://localhost:8080/contracts/{id}/removeparkplace/{parkingplaceid}";
 
+    static final String CREATE_TARIFF="http://localhost:8080/tariffs";
     static final String GET_TARIFFS="http://localhost:8080/tariffs";
     static final String GET_TARIFF="http://localhost:8080/tariffs/{id}";
 
@@ -47,12 +48,14 @@ public class ParkingclientApplication {
     static final String ADD_MALFUNCTION_FOR_WORKER="http://localhost:8080/workers/{id}/malfunctions";
     static final String DELETE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
 
+    static final String CREATE_OWNER="http://localhost:8080/owners";
     static final String GET_OWNERS="http://localhost:8080/owners";
     static final String GET_OWNER_BY_ID="http://localhost:8080/owners/{id}";
     static final String CHANGE_TARIFF="http://localhost:8080/owners/changetariff/{id}";
     static final String COLLECT_MONEY="http://localhost:8080/owners/{id}/collectmoney";
     static final String PAY_MONEY="http://localhost:8080/owners/paymoney";
 
+    static final String CREATE_ACCOUNTANT="http://localhost:8080/accountants";
     static final String GET_ACCOUNTANTS="http://localhost:8080/accountants";
     static final String GET_ACCOUNTANT="http://localhost:8080/accountants/{id}";
     static final String UPDATE_ACCOUNTANT_SALARY="http://localhost:8080/accountants/{id}";
@@ -131,6 +134,10 @@ public class ParkingclientApplication {
 
 
     }
+
+
+
+
     private void getParkingPlaces()
     {
         HttpHeaders headers = new HttpHeaders();
@@ -313,6 +320,24 @@ public class ParkingclientApplication {
         restTemplate.put(REMOVE_PARK_PLACE_FROM_CONTRACT,Contract.class,params);
     }
 
+    private void CreateTariff()
+    {
+
+        System.out.print("Enter an parkingprice: ");
+        double parkingprice = input.nextDouble();
+        System.out.print("Enter an watertariff: ");
+        double watertariff = input.nextDouble();
+        System.out.print("Enter an electricitytariff: ");
+        double electricitytariff = input.nextDouble();
+        System.out.print("Enter an gastariff: ");
+        double gastariff = input.nextDouble();
+        System.out.print("Enter an tariffdesc: ");
+        String desc =input.next();
+        Tariff tariff=new Tariff(parkingprice,watertariff,electricitytariff,gastariff,desc);
+        Tariff result = restTemplate.postForObject(CREATE_TARIFF,tariff,Tariff.class);
+        System.out.println(result);
+    }
+
     private void GetTariffs()
     {
         HttpHeaders headers = new HttpHeaders();
@@ -460,6 +485,17 @@ public class ParkingclientApplication {
 
     }
 
+    private void CreateOwner()
+    {
+        System.out.print("Enter an Owner name: ");
+        String name = input.nextLine();
+        System.out.print("Enter an account balance: ");
+        double balance =input.nextDouble();
+        CoOwner coOwner= new CoOwner(name,balance);
+        CoOwner result = restTemplate.postForObject(CREATE_OWNER,coOwner,CoOwner.class);
+        System.out.println(result);
+
+    }
     private void GetOwners()
     {
         HttpHeaders headers = new HttpHeaders();
@@ -526,6 +562,17 @@ public class ParkingclientApplication {
         restTemplate.put(PAY_MONEY,CoOwner.class);
     }
 
+    private void CreateAccountant()
+    {
+        System.out.print("Enter an Accountant name: ");
+        String accountantname = input.nextLine();
+        System.out.print("Enter an accountant salary: ");
+        double salary =input.nextDouble();
+        Accountant accountant= new Accountant(accountantname,salary);
+        Accountant result = restTemplate.postForObject(CREATE_ACCOUNTANT,accountant,Accountant.class);
+        System.out.println(result);
+
+    }
 
     private void GetAccountants()
     {
