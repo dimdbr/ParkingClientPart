@@ -13,53 +13,53 @@ import java.util.*;
 public class ParkingclientApplication {
 
     private static RestTemplate restTemplate = new RestTemplate();
-    static final String GET_PARKING_PLACES="http://localhost:8080/parkingplaces";
-    static final String GET_PARKING_PLACE="http://localhost:8080/parkingplaces/{id}";
-    static final String CREATE_PARKING_PLACES="http://localhost:8080/parkingplaces";
-    static final String DELETE_PARKING_PLACE="http://localhost:8080/parkingplaces/{id}";
+    static final String GET_PARKING_PLACES="http://192.168.99.100:8080/parkingplaces";
+    static final String GET_PARKING_PLACE="http://192.168.99.100:8080/parkingplaces/{id}";
+    static final String CREATE_PARKING_PLACES="http://192.168.99.100:8080/parkingplaces";
+    static final String DELETE_PARKING_PLACE="http://192.168.99.100:8080/parkingplaces/{id}";
 
-    static final String GET_CLIENTS="http://localhost:8080/clients";
-    static final String GET_CLIENT="http://localhost:8080/clients/{id}";
-    static final String CREATE_CLIENT="http://localhost:8080/clients";
-    static final String DELETE_CLIENT="http://localhost:8080/clients/{id}";
+    static final String GET_CLIENTS="http://192.168.99.100:8080/clients";
+    static final String GET_CLIENT="http://192.168.99.100:8080/clients/{id}";
+    static final String CREATE_CLIENT="http://192.168.99.100:8080/clients";
+    static final String DELETE_CLIENT="http://192.168.99.100:8080/clients/{id}";
 
-    static final String GET_CONTRACTS="http://localhost:8080/contracts";
-    static final String GET_CONTRACT="http://localhost:8080/contracts/{id}";
-    static final String CREATE_CONTRACTS="http://localhost:8080/contracts";
-    static final String DELETE_CONTRACTS="http://localhost:8080/contracts/{id}";
-    static final String ADD_CAR_TO_CONTRACT="http://localhost:8080/contracts/{id}/addcar/{carname}";
-    static final String REMOVE_CAR_FROM_CONTRACT="http://localhost:8080/contracts/{id}/delcar/{carname}";
-    static final String ADD_PARK_PLACE_TO_CONTRACT="http://localhost:8080/contracts/{id}/addparkplace/{parkingplaceid}";
-    static final String REMOVE_PARK_PLACE_FROM_CONTRACT="http://localhost:8080/contracts/{id}/removeparkplace/{parkingplaceid}";
+    static final String GET_CONTRACTS="http://192.168.99.100:8080/contracts";
+    static final String GET_CONTRACT="http://192.168.99.100:8080/contracts/{id}";
+    static final String CREATE_CONTRACTS="http://192.168.99.100:8080/contracts";
+    static final String DELETE_CONTRACTS="http://192.168.99.100:8080/contracts/{id}";
+    static final String ADD_CAR_TO_CONTRACT="http://192.168.99.100:8080/contracts/{id}/addcar/{carname}";
+    static final String REMOVE_CAR_FROM_CONTRACT="http://192.168.99.100:8080/contracts/{id}/delcar/{carname}";
+    static final String ADD_PARK_PLACE_TO_CONTRACT="http://192.168.99.100:8080/contracts/{id}/addparkplace/{parkingplaceid}";
+    static final String REMOVE_PARK_PLACE_FROM_CONTRACT="http://192.168.99.100:8080/contracts/{id}/removeparkplace/{parkingplaceid}";
 
-    static final String CREATE_TARIFF="http://localhost:8080/tariffs";
-    static final String GET_TARIFFS="http://localhost:8080/tariffs";
-    static final String GET_TARIFF="http://localhost:8080/tariffs/{id}";
+    static final String CREATE_TARIFF="http://192.168.99.100:8082/tariffs";
+    static final String GET_TARIFFS="http://192.168.99.100:8082/tariffs";
+    static final String GET_TARIFF="http://192.168.99.100:8082/tariffs/{id}";
 
-    static final String GET_MALFUNCTIONS="http://localhost:8080/malfunctions";
-    //static final String GET_UNPAYED_MALFUNCTIONS="http://localhost:8080/malfunctions/unpayed";
-    static final String GET_MALFUNCTION_BY_ID="http://localhost:8080/malfunctions/{id}";
-    static final String CREATE_MALFUNCTION="http://localhost:8080/malfunctions";
+    static final String GET_MALFUNCTIONS="http://192.168.99.100:8081/malfunctions";
+    //static final String GET_UNPAYED_MALFUNCTIONS="http://192.168.99.100:8081/malfunctions/unpayed";
+    static final String GET_MALFUNCTION_BY_ID="http://192.168.99.100:8081/malfunctions/{id}";
+    static final String CREATE_MALFUNCTION="http://192.168.99.100:8081/malfunctions";
 
-    static final String GET_WORKERS="http://localhost:8080/workers";
-    static final String GET_WORKERS_BY_ID="http://localhost:8080/workers/{id}";
-    static final String CREATE_WORKER="http://localhost:8080/workers";
-    static final String UPDATE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
-    static final String ADD_MALFUNCTION_FOR_WORKER="http://localhost:8080/workers/{id}/malfunctions";
-    static final String DELETE_WORKER_BY_ID="http://localhost:8080/workers/{id}";
+    static final String GET_WORKERS="http://192.168.99.100:8081/workers";
+    static final String GET_WORKERS_BY_ID="http://192.168.99.100:8081/workers/{id}";
+    static final String CREATE_WORKER="http://192.168.99.100:8081/workers";
+    static final String UPDATE_WORKER_BY_ID="http://192.168.99.100:8081/workers/{id}";
+    static final String ADD_MALFUNCTION_FOR_WORKER="http://192.168.99.100:8081/workers/{id}/malfunctions";
+    static final String DELETE_WORKER_BY_ID="http://192.168.99.100:8081/workers/{id}";
 
-    static final String CREATE_OWNER="http://localhost:8080/owners";
-    static final String GET_OWNERS="http://localhost:8080/owners";
-    static final String GET_OWNER_BY_ID="http://localhost:8080/owners/{id}";
-    static final String CHANGE_TARIFF="http://localhost:8080/owners/changetariff/{id}";
-    static final String COLLECT_MONEY="http://localhost:8080/owners/{id}/collectmoney";
-    static final String PAY_MONEY="http://localhost:8080/owners/paymoney";
+    static final String CREATE_OWNER="http://192.168.99.100:8082/owners";
+    static final String GET_OWNERS="http://192.168.99.100:8082/owners";
+    static final String GET_OWNER_BY_ID="http://192.168.99.100:8082/owners/{id}";
+    static final String CHANGE_TARIFF="http://192.168.99.100:8082/owners/changetariff/{id}";
+    static final String COLLECT_MONEY="http://192.168.99.100:8082/owners/{id}/collectmoney";
+    static final String PAY_MONEY="http://192.168.99.100:8082/owners/paymoney";
 
-    static final String CREATE_ACCOUNTANT="http://localhost:8080/accountants";
-    static final String GET_ACCOUNTANTS="http://localhost:8080/accountants";
-    static final String GET_ACCOUNTANT="http://localhost:8080/accountants/{id}";
-    static final String UPDATE_ACCOUNTANT_SALARY="http://localhost:8080/accountants/{id}";
-    static final String SET_CLIENTS_PAY_PRICE="http://localhost:8080/accountants/setprice";
+    static final String CREATE_ACCOUNTANT="http://192.168.99.100:8081/accountants";
+    static final String GET_ACCOUNTANTS="http://192.168.99.100:8081/accountants";
+    static final String GET_ACCOUNTANT="http://192.168.99.100:8081/accountants/{id}";
+    static final String UPDATE_ACCOUNTANT_SALARY="http://192.168.99.100:8081/accountants/{id}";
+    static final String SET_CLIENTS_PAY_PRICE="http://192.168.99.100:8081/accountants/setprice";
 
     Scanner input = new Scanner(System.in);
 
@@ -68,6 +68,8 @@ public class ParkingclientApplication {
         ParkingclientApplication parkingclientApplication = new ParkingclientApplication();
         System.out.println("Parking places");
         parkingclientApplication.getParkingPlaces();
+        System.out.println("create client:");
+        parkingclientApplication.CreateClient();
         //System.out.println("Parking places with id 8");
         //parkingclientApplication.GetParkingPlaceById("8");
         //System.out.println("creating client");
@@ -141,6 +143,7 @@ public class ParkingclientApplication {
     private void getParkingPlaces()
     {
         HttpHeaders headers = new HttpHeaders();
+        headers.add("X-TenantID","TenantOne");
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         //ResponseEntity<List<ParkingPlace>> parkingplacesresp=restTemplate.exchange(GET_PARKING_PLACES, HttpMethod.GET, null, new ParameterizedTypeReference<List<ParkingPlace>>(){});
@@ -150,6 +153,7 @@ public class ParkingclientApplication {
     }
     private void GetParkingPlaceById(String parkingPlaceId)
     {   HttpHeaders headers = new HttpHeaders();
+        headers.add("X-TenantID","TenantOne");
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",parkingPlaceId);
@@ -165,6 +169,7 @@ public class ParkingclientApplication {
 
     private void GetClients(){
         HttpHeaders headers = new HttpHeaders();
+        headers.add("X-TenantID","TenantOne");
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         ResponseEntity<List<Client>> parkingplacesresp=restTemplate.exchange(GET_CLIENTS, HttpMethod.GET, null, new ParameterizedTypeReference<List<Client>>(){});
@@ -180,7 +185,9 @@ public class ParkingclientApplication {
 
     private void GetClient(String clientId)
     {
+
         HttpHeaders headers = new HttpHeaders();
+        headers.add("X-TenantID","TenantOne");
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",clientId);
@@ -190,11 +197,18 @@ public class ParkingclientApplication {
 
     private void CreateClient()
     {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-TenantID","TenantOne");
+
+
         System.out.print("Enter an client name: ");
         String name = input.nextLine();
         System.out.println("Client created");
         Client client= new Client(name);
-        ParkingPlace result = restTemplate.postForObject(CREATE_CLIENT,client,ParkingPlace.class);
+        HttpEntity<Client> entity= new HttpEntity<>(client,headers);
+
+        //ParkingPlace result = restTemplate.postForObject(CREATE_CLIENT,client,ParkingPlace.class);
+        Client result = restTemplate.postForObject(CREATE_CLIENT,entity,Client.class);
         System.out.println(result);
     }
 
@@ -212,6 +226,7 @@ public class ParkingclientApplication {
     private void GetContracts()
     {
         HttpHeaders headers = new HttpHeaders();
+        headers.add("X-TenantID","TenantOne");
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         ResponseEntity<String> result = restTemplate.exchange(GET_CONTRACTS,HttpMethod.GET,entity,String.class);
@@ -223,8 +238,10 @@ public class ParkingclientApplication {
     {
 
         System.out.print("Enter an Contracts id: ");
+
         String ContractId = input.nextLine();
         HttpHeaders headers = new HttpHeaders();
+        headers.add("X-TenantID","TenantOne");
         HttpEntity<String> entity= new HttpEntity<String>("parameters",headers);
         Map<String,String> params = new HashMap<String, String>();
         params.put("id",ContractId);
