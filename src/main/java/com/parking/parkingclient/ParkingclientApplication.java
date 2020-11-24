@@ -1,5 +1,13 @@
 package com.parking.parkingclient;
 
+import com.contractservice.grpc.ContractServiceGrpc;
+import com.contractservice.grpc.ContractServiceOuterClass;
+import com.incomeExpensesService.grpc.IncomeExpensesServiceGrpc;
+import com.incomeExpensesService.grpc.IncomeExpensesServiceOuterClass;
+import com.tariffservice.grpc.TariffServiceGrpc;
+import com.tariffservice.grpc.TariffServiceOuterClass;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import models.*;
 import org.hibernate.jdbc.Work;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,8 +27,8 @@ public class ParkingclientApplication {
     static final String CREATE_PARKING_PLACES="http://192.168.99.100:8080/parkingplaces";
     static final String DELETE_PARKING_PLACE="http://192.168.99.100:8080/parkingplaces/{id}";
 
-    static final String GET_CLIENTS="http://192.168.99.100:8080/clients";
-    static final String GET_CLIENT="http://192.168.99.100:8080/clients/{id}";
+    static final String GET_CLIENTS="http://192.168.99.101:30460/clients";
+    static final String GET_CLIENT="http://192.168.99.101:30460/clients/{id}";
     static final String CREATE_CLIENT="http://192.168.99.100:8080/clients";
     static final String DELETE_CLIENT="http://192.168.99.100:8080/clients/{id}";
 
@@ -65,10 +73,47 @@ public class ParkingclientApplication {
     Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+         ManagedChannel channel1 = ManagedChannelBuilder.forAddress("localhost",9090).usePlaintext().build();
+         ManagedChannel channel2 = ManagedChannelBuilder.forAddress("localhost",9091).usePlaintext().build();
+        ManagedChannel channel3 =ManagedChannelBuilder.forAddress("localhost",9092).usePlaintext().build();
+
+       ContractServiceGrpc.ContractServiceBlockingStub clientStub1 =
+               com.contractservice.grpc.ContractServiceGrpc.newBlockingStub(channel1);
+       TariffServiceGrpc.TariffServiceBlockingStub tariffServiceBlockingStub =
+               TariffServiceGrpc.newBlockingStub(channel2);
+       IncomeExpensesServiceGrpc.IncomeExpensesServiceBlockingStub incomeExpensesServiceBlockingStub =
+               IncomeExpensesServiceGrpc.newBlockingStub(channel3);
+
+        ContractServiceOuterClass.Empty.Builder emptyForCS  = ContractServiceOuterClass.Empty.newBuilder();
+        IncomeExpensesServiceOuterClass.Empty.Builder emptyForIES = IncomeExpensesServiceOuterClass.Empty.newBuilder();
+        TariffServiceOuterClass.Empty.Builder emptyForTS = TariffServiceOuterClass.Empty.newBuilder();
+
+        ContractServiceOuterClass.Clients clientsResponse = clientStub1.grpcGetAllClients(emptyForCS.build());
+        IncomeExpensesServiceOuterClass.Accountants accountants = incomeExpensesServiceBlockingStub.grpcGetAllAccountants(emptyForIES.build());
+        IncomeExpensesServiceOuterClass.CommunalWorkers communalWorkers = incomeExpensesServiceBlockingStub.grpcGetAllWorkers(emptyForIES.build());
+        System.out.println("Clients \n");
+        System.out.println(clientsResponse.getClientsList());
+        System.out.println("Accountants \n");
+        System.out.println(accountants);
+        System.out.println("Workers \n");
+        System.out.println(communalWorkers);
+        ContractServiceOuterClass.UUID id = ContractServiceOuterClass.
+                UUID.
+                newBuilder().
+                setValue("af5259c7-ec5f-4751-b9d7-5139b2b450ea")
+                .build();
+
+
+
+
+
+/*
+
         // HttpHeaders
         ParkingclientApplication parkingclientApplication = new ParkingclientApplication();
-        System.out.println("Parking places");
-        parkingclientApplication.getParkingPlaces();
+        ///System.out.println("Parking places");
+        //parkingclientApplication.getParkingPlaces();
         //System.out.println("create client:");
         //parkingclientApplication.CreateClient();
         //System.out.println("Parking places with id 8");
@@ -135,8 +180,7 @@ public class ParkingclientApplication {
         //parkingclientApplication.SetClientPayPrice();
         System.out.println("get all clients");
         parkingclientApplication.GetClients();
-
-
+*/
     }
 
 

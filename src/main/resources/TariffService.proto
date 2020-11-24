@@ -1,0 +1,65 @@
+syntax="proto3";
+option java_package = "com.tariffservice.grpc";
+
+service TariffService
+{
+  rpc GrpcGetTariff(Id) returns (Tariff);
+  rpc GrpcGetAllTariffs(Empty) returns(Tariffs);
+  rpc GrpcUpdateTariff(Tariff) returns(Empty);
+  rpc GrpcGetCoOwner(Id) returns (CoOwner);
+  rpc GrpcGetAllCoOwners(Empty) returns(CoOwners);
+  rpc GrpcAddToBalance(ChangeBalance) returns(Empty);
+  rpc GrpcCollectMoney(Id) returns(Empty);
+  rpc GrpcPayMoney(Empty) returns(Empty);
+  rpc GrpcCreateCoOwner(CreateCoOwner) returns (Empty);
+  rpc GrpcCreateTariff(CreateTariff) returns(Empty);
+}
+message Id
+{
+  int32 id =1;
+}
+
+message CoOwner
+{
+  int32 id =1 ;
+  string name =2;
+  double accountBalance =3;
+}
+message CoOwners
+{
+  repeated CoOwner owners =1;
+}
+message Empty
+{}
+message ChangeBalance
+{
+  int32 id =1;
+  double income =2;
+}
+message Tariff
+{
+  int32 id=1;
+  double placePrice =2;
+  double waterTariff=3;
+  double electricityTariff=4;
+  double gasTariff=5;
+  string tariffDesc=6;
+}
+message Tariffs
+{
+  repeated Tariff tariffs=1;
+}
+message CreateTariff
+{
+  double placePrice =1;
+  double waterTariff=2;
+  double electricityTariff=3;
+  double gasTariff=4;
+  string tariffDesc=5;
+}
+message CreateCoOwner
+{
+  string name =1;
+  double accountBalance =2;
+}
+

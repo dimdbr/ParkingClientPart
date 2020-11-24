@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+option java_package = "com.incomeExpensesService.grpc";
+service IncomeExpensesService
+{
+  rpc GrpcGetMalfunction(UUID) returns(Malfunction);
+  rpc GrpcGetAllMalfunctions(Empty) returns(Malfunctions);
+  rpc GrpcAddMalfunctionToWorker(addMalfunctionToWorker) returns(Empty);
+
+  rpc GrpcGetWorker(UUID) returns (CommunalWorker);
+  rpc GrpcGetAllWorkers(Empty) returns(CommunalWorkers);
+  rpc GrpcUpdateWorker(CommunalWorker) returns(Empty);
+  rpc GrpcCreateWorker(CreateCW) returns(Empty);
+  rpc GrpcDeleteWorker(UUID) returns(Empty);
+
+  rpc GrpcGetAccountant(Id) returns(Accountant);
+  rpc GrpcGetAllAccountants(Empty) returns(Accountants);
+  rpc GrpcUpdateAccountantSalary(updateAccountantSalary) returns(Empty);
+  rpc GrpcSetPayPriceForClients(Empty) returns(Empty);
+
+}
+message Accountant
+{
+  int32 id=1 ;
+  string name =2;
+  double salary = 3;
+
+}
+message Accountants
+{
+  repeated Accountant accountants =1;
+}
+message updateAccountantSalary
+{
+  int32 id =1;
+  double newSalary =2;
+
+}
+message UUID
+{
+  string value = 1;
+}
+message Id
+{
+  int32 id =1;
+}
+message CommunalWorker
+{
+  string id =1;
+  string name=2;
+  double salary =3;
+  bool isWinter =4;
+  enum CWType
+  {
+    WATER =0;
+    ELECTRICITY =1;
+    GAS =2;
+
+  }
+  CWType cwtype =5;
+}
+message CreateCW
+{
+  string name=1;
+  double salary =2;
+  bool isWinter =3;
+  enum CWType
+  {
+    WATER =0;
+    ELECTRICITY =1;
+    GAS =2;
+
+  }
+  CWType cwtype =4;
+}
+
+message CommunalWorkers
+{
+  repeated CommunalWorker workers=1;
+}
+message Empty
+{}
+message Malfunction
+{
+  string id=1;
+  double fixPrice = 2;
+  string malfunctionDescription =3;
+  bool isPayed=4;
+  string workerId =5;
+}
+message Malfunctions
+{
+  repeated Malfunction malfunctions=1;
+}
+
+message addMalfunctionToWorker
+{
+  string workerId=1;
+  Malfunction malfunction =2;
+}
